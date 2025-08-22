@@ -1,9 +1,73 @@
-import React from 'react'
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [toast, setToast] = useState(""); // for custom prompt
+  const navigate = useNavigate();
 
-export default App
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 3000); // auto-hide after 3s
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/login", {
+        email,
+        password,
+      });
+
+      if (res.data.success) {
+        showToast("✅ Login successful!");
+        setTimeout(() => navigate("/dashboard"), 1500); // redirect after 1.5s
+      } else {
+        showToast("❌ Invalid credentials");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("⚠️ Error connecting to server");
+    }
+  };
+
+  return (
+    <div className="loginContainer">
+      <form onSubmit={handleSubmit} className="form">
+        <h2 className="title">Login</h2>
+
+        <div className="inputGroup">
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+
+        <div className="inputGroup">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+
+        <button className="button" type="submit">
+          Login
+        </button>
+      </form>
+
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+};
+
+export default App;
