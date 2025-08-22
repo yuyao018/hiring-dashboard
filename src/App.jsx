@@ -24,12 +24,14 @@ const App = () => {
       if (res.data.success) {
         showToast("✅ Login successful!");
         setTimeout(() => navigate("/dashboard"), 1500); // redirect after 1.5s
-      } else {
-        showToast("❌ Invalid credentials");
       }
     } catch (err) {
-      console.error(err);
-      showToast("⚠️ Error connecting to server");
+      if (err.response && err.response.status === 401) {
+        showToast("❌ Invalid credentials");
+      } else {
+        console.error(err);
+        showToast("⚠️ Error connecting to server");
+      }
     }
   };
 
