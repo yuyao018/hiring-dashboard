@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -37,6 +38,7 @@ const App = () => {
 
   return (
     <div className="loginContainer">
+      <Navbar/>
       <form onSubmit={handleSubmit} className="form">
         <h2 className="title">Login</h2>
 

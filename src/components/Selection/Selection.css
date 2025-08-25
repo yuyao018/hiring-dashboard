@@ -1,0 +1,12 @@
+label {
+    margin-right: 8px;
+}
+
+select {
+    padding: 6px 16px;
+    border-radius: 5px;
+}
+
+select:hover {
+    cursor: pointer;
+}

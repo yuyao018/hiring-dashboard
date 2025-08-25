@@ -7,6 +7,10 @@
     font-family: "Poppins", sans-serif;
 }
 
+a {
+    text-decoration: none;
+}
+
 .loginContainer {
     display: flex;
     justify-content: center;
@@ -39,17 +43,6 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-top: 5px;
-}
-
-.button {
-    width: 100%;
-    padding: 0.7rem;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
 }
 
 .toast {
