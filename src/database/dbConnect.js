@@ -1,11 +1,12 @@
+require("dotenv").config();
 const { Client } = require("pg");
 
 const dbConfig = {
-    host: "localhost",
-    user: "postgres",
-    port: 5432,
-    password: "P@ssw0rd!",
-    database: "Hiring Management System"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 };
 
 function getClient() {
