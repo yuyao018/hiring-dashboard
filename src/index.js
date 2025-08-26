@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import App from './App';
 import Dashboard from "./Dashboard";
+import Form from "./Form";
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -12,6 +13,7 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/form" element={<Form />} />
     </Routes>
   </BrowserRouter>
 );

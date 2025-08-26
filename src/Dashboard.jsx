@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Selection from './components/Selection/Selection'
 import Card from './components/Card/Card'
+import { Link } from 'react-router-dom'
 import './Dashboard.css'
 
 const Dashboard = () => {
@@ -93,7 +94,7 @@ const Dashboard = () => {
                     <h1>Dashboard</h1>
                 </div>
                 <div className='createJob'>
-                    <a href='/'>Create job</a>
+                    <Link to='/Form'>Create job</Link>
                 </div>
             </div>
             <div className='recruiterTools'>
