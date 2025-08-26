@@ -17,7 +17,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const res = await fetch("http://localhost:5000/jobs"); // ✅ call backend API
+                const res = await fetch("http://localhost:4000/jobs"); // ✅ call backend API
                 const data = await res.json();
 
                 if (data.success) {
@@ -32,7 +32,7 @@ const Dashboard = () => {
 
         const fetchApplicants = async () => {
             try {
-                const res = await fetch("http://localhost:5000/applicants", {
+                const res = await fetch("http://localhost:4000/applicants", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" }
                 });
@@ -178,8 +178,9 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className='col2'>
-                        <div className='button'>
-                            <button>Rejected</button>
+                        <div className='buttonGroup'>
+                            <button className='shortlistBtn'>Shortlist</button>
+                            <button className='RejectBtn'>Rejected</button>
                         </div>
                         <div className='resume'></div>
                     </div>
