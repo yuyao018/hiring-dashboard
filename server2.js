@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { loginAdmin } = require("./src/database/admin");
-const { getJob, createJob } = require("./src/database/job");
+const { getJob, getAllJobs, createJob } = require("./src/database/job");
 const { getApplicants } = require("./src/database/applicant");
 
 const app = express();
@@ -41,17 +41,27 @@ app.get("/jobs", async (req, res) => {
     }
 });
 
+app.get("/allJobs", async (req, res) => {
+    try {
+        const jobs = await getAllJobs(); // Fetch all jobs for table display
+        res.json({ success: true, jobs });
+    } catch (err) {
+        console.error("Error fetching all jobs:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
 app.post("/jobs", async (req, res) => {
     try {
         if (!currentAdmin) {
             return res.status(401).json({ success: false, message: "Not logged in" });
         }
-
+        
         const jobData = {
             ...req.body,
             created_by: currentAdmin.id || currentAdmin.admin_id
         };
-
+        
         const job = await createJob(jobData); // Create job in the database
         res.json({ success: true, job });
     } catch (err) {

@@ -10,6 +10,16 @@ async function getJob() {
     return result.rows;
 }
 
+async function getAllJobs() {
+    const con = getClient();
+
+    await con.connect();
+    const result = await con.query("SELECT job_id, job, status, created_by, created_at FROM Job ORDER BY created_at DESC");
+    await con.end();
+
+    return result.rows;
+}
+
 async function createJob(jobData) {
     const con = getClient();
     await con.connect();
@@ -34,4 +44,4 @@ async function createJob(jobData) {
     }
 }
 
-module.exports = { getJob, createJob };
+module.exports = { getJob, getAllJobs, createJob };
