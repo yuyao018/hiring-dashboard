@@ -15,13 +15,16 @@ const Managejob = () => {
     const recruitment = ["My Recruitment", "All Recruitment"];
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedStatus, setSelectedStatus] = useState("");
+    const [selectedRecruitment, setSelectedRecruitment] = useState("");
+    const [currentAdminId, setCurrentAdminId] = useState(null);
 
     useEffect(() => {
         const fetchJobsData = async () => {
             try {
                 const response = await fetch("http://localhost:4000/allJobs");
                 const data = await response.json();
-
+                
                 if (data.success) {
                     setJobs(data.jobs);
                 } else {
@@ -34,6 +37,13 @@ const Managejob = () => {
             }
         };
 
+        // Get current admin ID from localStorage or session
+        const adminData = localStorage.getItem('adminData');
+        if (adminData) {
+            const admin = JSON.parse(adminData);
+            setCurrentAdminId(admin.id || admin.admin_id);
+        }
+
         fetchJobsData();
     }, []);
 
@@ -43,16 +53,42 @@ const Managejob = () => {
         return date.toLocaleDateString();
     };
 
+    // Filter jobs based on selected status and recruitment
+    const filteredJobs = jobs.filter(job => {
+        // Status filter
+        const statusMatch = !selectedStatus || job.status === selectedStatus;
+        
+        // Recruitment filter
+        let recruitmentMatch = true;
+        if (selectedRecruitment === "My Recruitment") {
+            recruitmentMatch = job.created_by === currentAdminId;
+        } else if (selectedRecruitment === "All Recruitment") {
+            recruitmentMatch = true; // Show all jobs
+        }
+        
+        return statusMatch && recruitmentMatch;
+    });
+
     return (
         <div>
             <Navbar/>
             <div className='manageJobContainer'>
                 <div className='manageJobSelection'>
                     <div className='jobStatus'>
-                        <Selection options={jobStatus} label="Status"/>
+                        <Selection
+                            options={jobStatus}
+                            label="Status"
+                            value={selectedStatus}
+                            onChange={(e) => setSelectedStatus(e.target.value)}
+                        />
                     </div>
                     <div className='recruitment'>
-                        <Selection options={recruitment} label="Recruitment"/>
+                        <Selection
+                            options={recruitment}
+                            label="Recruitment"
+                            value={selectedRecruitment}
+                            onChange={(e) => setSelectedRecruitment(e.target.value)}
+                        />
                     </div>
                 </div>
                 <div className='manageJobTable'>
@@ -78,7 +114,7 @@ const Managejob = () => {
                                             <TableCell colSpan={7} align="center">No jobs found</TableCell>
                                         </TableRow>
                                     ) : (
-                                        jobs.map((job, index) => (
+                                        filteredJobs.map((job, index) => (
                                             <TableRow key={index}>
                                                 <TableCell>{job.job_id || 'N/A'}</TableCell>
                                                 <TableCell>{job.job || 'N/A'}</TableCell>

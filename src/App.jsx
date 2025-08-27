@@ -23,6 +23,8 @@ const App = () => {
       });
 
       if (res.data.success) {
+        // Store admin data in localStorage
+        localStorage.setItem('adminData', JSON.stringify(res.data.admin));
         showToast("✅ Login successful!");
         setTimeout(() => navigate("/dashboard"), 1500); // redirect after 1.5s
       }
