@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { loginAdmin } = require("./src/database/admin");
-const { getJob, getAllJobs, editJob, updateJob, createJob } = require("./src/database/job");
+const { getJob, getAllJobs, editJob, updateJob, updateStatus, createJob } = require("./src/database/job");
 const { getApplicants } = require("./src/database/applicant");
 
 const app = express();
@@ -80,6 +80,17 @@ app.put("/updateJob/:jobId", async (req, res) => {
     }
 });
 
+app.put("/updateStatus/:jobId", async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const { status } = req.body;
+        const jobs = await updateStatus(jobId, status);
+        res.json({ success: true, job: jobs[0] });
+    } catch (err) {
+        console.error("Error fetching all jobs:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
 
 app.post("/jobs", async (req, res) => {
     try {

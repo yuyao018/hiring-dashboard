@@ -11,7 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import './Managejob.css'
 
-
 const Managejob = () => {
     const jobStatus = ["Active", "Closed", "Draft"]
     const recruitment = ["My Recruitment", "All Recruitment"];
@@ -28,7 +27,7 @@ const Managejob = () => {
             try {
                 const response = await fetch("http://localhost:4000/allJobs");
                 const data = await response.json();
-                
+
                 if (data.success) {
                     setJobs(data.jobs);
                 } else {
@@ -72,6 +71,22 @@ const Managejob = () => {
         
         return statusMatch && recruitmentMatch;
     });
+
+    const handleUpdateStatus = async (jobId, status) => {
+        const response = await fetch(`http://localhost:4000/updateStatus/${jobId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+        });
+        const data = await response.json();
+        if (data.success) {
+            setJobs(prev =>
+                prev.map(job =>
+                    job.job_id === jobId ? { ...job, status } : job
+                )
+            );
+        }
+    };
 
     return (
         <div>
@@ -132,8 +147,26 @@ const Managejob = () => {
                                                 </TableCell>
                                                 <TableCell>{formatDate(job.created_at)}</TableCell>
                                                 <TableCell>
-                                                    <button className='publishBtn' disabled={job.status != "Draft"}>Publish</button>
-                                                    <button className='closeBtn' disabled={job.status != "Active"}>Close</button>
+                                                    <button
+                                                    className='publishBtn'
+                                                    disabled={job.status !== "Draft"}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // prevent row click navigation
+                                                        handleUpdateStatus(job.job_id, "Active");
+                                                    }}
+                                                    >
+                                                        Publish
+                                                    </button>
+                                                    <button
+                                                    className='closeBtn'
+                                                    disabled={job.status !== "Active"}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // prevent row click navigation
+                                                        handleUpdateStatus(job.job_id, "Closed");
+                                                    }}
+                                                    >
+                                                        Close
+                                                    </button>
                                                 </TableCell>
                                             </TableRow>
                                         ))

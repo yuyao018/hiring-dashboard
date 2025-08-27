@@ -71,6 +71,28 @@ async function updateJob(jobId, jobData) {
     };
 }
 
+async function updateStatus(jobId, status) {
+    const con = getClient();
+    await con.connect();
+
+    const query = `
+        UPDATE Job
+        SET status = $1,
+        updated_at = NOW()
+        WHERE job_id = $2
+        RETURNING *;
+    `;
+
+    const result = await con.query(query, [status, jobId]);
+
+    await con.end();
+
+    return {
+        success: result.rowCount > 0,
+        job: result.rows[0] || null
+    };
+}
+
 async function createJob(jobData) {
     const con = getClient();
     await con.connect();
@@ -95,4 +117,4 @@ async function createJob(jobData) {
     }
 }
 
-module.exports = { getJob, getAllJobs, editJob, updateJob, createJob };
+module.exports = { getJob, getAllJobs, editJob, updateJob, updateStatus, createJob };

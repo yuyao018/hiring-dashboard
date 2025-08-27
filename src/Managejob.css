@@ -45,6 +45,12 @@
     font-size: 12px;
 }
 
+.publishBtn:disabled, .closeBtn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
 .status-cell > span {
     border-radius: 15px;
     padding: 4px 8px;
