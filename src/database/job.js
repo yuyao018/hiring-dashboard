@@ -24,15 +24,15 @@ async function createJob(jobData) {
     const con = getClient();
     await con.connect();
 
-    const { job_title, job_type, education, experience, overview, requirements, created_by } = jobData;
+    const { job_title, job_type, education, experience, overview, requirements, status, created_by } = jobData;
     const requirementsString = Array.isArray(requirements) ? requirements.filter(r => r.trim()).join(';') : requirements;
 
     const query = `
-        INSERT INTO Job (job, job_type, education, experience, description, requirement, created_by, created_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+        INSERT INTO Job (job, job_type, education, experience, description, requirement, status, created_by, created_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
         RETURNING *
     `;
-    const values = [job_title, job_type, education, experience, overview, requirementsString, created_by];
+    const values = [job_title, job_type, education, experience, overview, requirementsString, status, created_by];
 
     try {
         const result = await con.query(query, values);

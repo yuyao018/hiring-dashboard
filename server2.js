@@ -56,12 +56,12 @@ app.post("/jobs", async (req, res) => {
         if (!currentAdmin) {
             return res.status(401).json({ success: false, message: "Not logged in" });
         }
-        
+
         const jobData = {
             ...req.body,
             created_by: currentAdmin.id || currentAdmin.admin_id
         };
-        
+
         const job = await createJob(jobData); // Create job in the database
         res.json({ success: true, job });
     } catch (err) {

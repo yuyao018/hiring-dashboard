@@ -25,13 +25,27 @@ const Form = () => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e, status) => {
         e.preventDefault();
+
+        // Check if required fields are filled
+        if (!formData.job_title || !formData.education || !formData.overview) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
         try {
             const jobData = {
-                ...formData,
-                requirements: requirements.filter(req => req.trim()) // Remove empty requirements
+                job_title: formData.job_title,
+                job_type: formData.job_type,
+                education: formData.education,
+                experience: formData.experience,
+                overview: formData.overview,
+                requirements: requirements.filter(req => req.trim()), // Remove empty requirements
+                status: status,
             };
+
+            console.log('Sending job data:', jobData);
 
             const response = await fetch('http://localhost:4000/jobs', {
                 method: 'POST',
@@ -42,8 +56,10 @@ const Form = () => {
             });
 
             const result = await response.json();
+            console.log('Response:', result);
+            
             if (result.success) {
-                alert('Job created successfully!');
+                alert(`Job ${status === "Draft" ? "saved as draft" : "published"} successfully!`);
                 // Reset form
                 setFormData({
                     job_title: '',
@@ -54,11 +70,11 @@ const Form = () => {
                 });
                 setRequirements(['']);
             } else {
-                alert('Failed to create job');
+                alert(`Failed to create job: ${result.message || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Error creating job:', error);
-            alert('Error creating job');
+            alert('Error creating job: ' + error.message);
         }
     };
 
@@ -67,7 +83,7 @@ const Form = () => {
             <Navbar/>
             <div className='formContainer'>
                 <h2 className='formTitle'>Create Job for</h2>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <div className='row'>
                         <div className='jobTitleInput'>
                             <label htmlFor="jobTitle" className='jobTitleLabel'>Job Title</label><br />
@@ -143,8 +159,9 @@ const Form = () => {
                             </div>
                         ))}
                     </div>
-                    <div className='publishBtn'>
-                        <Button variant='contained' type="submit">Publish</Button>
+                    <div className='formBtn'>
+                        <Button variant='outlined' color='warning' onClick={(e) => handleSubmit(e, "Draft")}>Draft</Button>
+                        <Button variant='contained' onClick={(e) => handleSubmit(e, "Active")}>Publish</Button>
                     </div>
                 </form>
             </div>

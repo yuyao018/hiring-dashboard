@@ -141,7 +141,8 @@
     border-color: #fca5a5;
 }
 
-.publishBtn {
+.formBtn {
     display: flex;
     justify-content: center;
+    gap: 10px;
 }
