@@ -45,13 +45,6 @@
     font-size: 12px;
 }
 
-.status-cell {
-    font-weight: bold;
-    text-align: center;
-    border-radius: 8px;
-    padding: 6px 12px;
-}
-
 .status-cell > span {
     border-radius: 15px;
     padding: 4px 8px;

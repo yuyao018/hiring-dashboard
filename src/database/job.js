@@ -20,6 +20,57 @@ async function getAllJobs() {
     return result.rows;
 }
 
+async function editJob(jobId) {
+    const con = getClient();
+
+    await con.connect();
+    const result = await con.query(
+        "SELECT job, job_type, experience, education, requirement, description FROM Job WHERE job_id=$1",
+        [jobId]
+    );
+    await con.end();
+
+    return result.rows;
+}
+
+async function updateJob(jobId, jobData) {
+    const con = getClient();
+    await con.connect();
+    const { job_title, job_type, experience, education, requirement, description } = jobData;
+
+    const query = `
+        UPDATE Job
+        SET job = $1,
+            job_type = $2,
+            experience = $3,
+            education = $4,
+            requirement = $5,
+            description = $6,
+            updated_at = NOW()
+        WHERE job_id = $7
+        RETURNING *;
+    `;
+
+    const values = [
+        job_title,
+        job_type,
+        experience,
+        education,
+        requirement,
+        description,
+        jobId
+    ];
+
+    const result = await con.query(query, values);
+
+    await con.end();
+
+    return {
+        success: result.rowCount > 0,
+        job: result.rows[0] || null
+    };
+}
+
 async function createJob(jobData) {
     const con = getClient();
     await con.connect();
@@ -44,4 +95,4 @@ async function createJob(jobData) {
     }
 }
 
-module.exports = { getJob, getAllJobs, createJob };
+module.exports = { getJob, getAllJobs, editJob, updateJob, createJob };

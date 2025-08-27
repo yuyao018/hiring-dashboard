@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { loginAdmin } = require("./src/database/admin");
-const { getJob, getAllJobs, createJob } = require("./src/database/job");
+const { getJob, getAllJobs, editJob, updateJob, createJob } = require("./src/database/job");
 const { getApplicants } = require("./src/database/applicant");
 
 const app = express();
@@ -50,6 +50,36 @@ app.get("/allJobs", async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
+
+app.get("/editJob/:jobId", async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const jobs = await editJob(jobId);
+        res.json({ success: true, job: jobs[0] });
+    } catch (err) {
+        console.error("Error fetching all jobs:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+app.put("/updateJob/:jobId", async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const jobData = req.body;
+
+        const result = await updateJob(jobId, jobData);
+
+        if (result.success) {
+            res.json({ success: true, job: result.job });
+        } else {
+            res.status(404).json({ success: false, message: "Job not found" });
+        }
+    } catch (err) {
+        console.error("Error updating job:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
 
 app.post("/jobs", async (req, res) => {
     try {

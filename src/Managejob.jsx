@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar'
 import Selection from './components/Selection/Selection'
 import Table from '@mui/material/Table'
@@ -10,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import './Managejob.css'
 
+
 const Managejob = () => {
     const jobStatus = ["Active", "Closed", "Draft"]
     const recruitment = ["My Recruitment", "All Recruitment"];
@@ -18,6 +20,8 @@ const Managejob = () => {
     const [selectedStatus, setSelectedStatus] = useState("");
     const [selectedRecruitment, setSelectedRecruitment] = useState("");
     const [currentAdminId, setCurrentAdminId] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchJobsData = async () => {
@@ -115,7 +119,12 @@ const Managejob = () => {
                                         </TableRow>
                                     ) : (
                                         filteredJobs.map((job, index) => (
-                                            <TableRow key={index}>
+                                            <TableRow
+                                            key={index}
+                                            hover
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => navigate(`/Edit/${job.job_id}`)}
+                                            >
                                                 <TableCell>{job.job_id || 'N/A'}</TableCell>
                                                 <TableCell>{job.job || 'N/A'}</TableCell>
                                                 <TableCell className={`status-cell ${job.status?.toLowerCase() || ''}`}>

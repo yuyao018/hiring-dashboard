@@ -6,6 +6,7 @@ import App from './App';
 import Dashboard from "./Dashboard";
 import Form from "./Form";
 import Managejob from './Managejob';
+import { Edit } from './Edit';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,6 +17,7 @@ root.render(
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/form" element={<Form />} />
       <Route path="/Managejob" element={<Managejob />} />
+      <Route path="/Edit/:jobId" element={<Edit />} />
     </Routes>
   </BrowserRouter>
 );
