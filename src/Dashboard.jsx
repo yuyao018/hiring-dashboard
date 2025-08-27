@@ -113,9 +113,6 @@ const Dashboard = () => {
                         onChange={(e) => setSelectedJob(e.target.value === "All Jobs" ? "" : e.target.value)}
                     />
                 </div>
-                <div className='jobStatus'>
-                    <Selection options={jobStatus} label="Job Status"/>
-                </div>
                 <div className='applicationStatus'>
                     <Selection options={applicationStatus} label="Application Status"/>
                 </div>
@@ -146,7 +143,11 @@ const Dashboard = () => {
                 </div>
                 )})()}
                 <div className='detail'>
-                    <div className='result'>
+                    <div className='buttonGroup'>
+                        <Button variant='outlined' color='success' className='shortlistBtn'>Shortlist</Button>
+                        <Button variant='outlined' color='error' className='RejectBtn'>Reject</Button>
+                    </div>
+                    <div className='resultContainer'>
                         {(() => {
                             const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
                             if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) {
@@ -168,28 +169,25 @@ const Dashboard = () => {
                                 const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
                                 if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) return null;
                                 const selected = filtered[selectedApplicantIndex];
-                                let mbti = '';
+                                let applicant_personality = '';
                                 // Prefer direct field from DB if available
                                 if (selected.personality_type) {
-                                    mbti = String(selected.personality_type);
+                                    applicant_personality = String(selected.personality_type);
                                 } else {
                                     // Fallback: parse prior personality JSON structure if present
                                     try {
                                         const p = typeof selected.personality === 'string' ? JSON.parse(selected.personality) : selected.personality;
-                                        mbti = p && (p.mbti || p.MBTI || p.type) ? (p.mbti || p.MBTI || p.type) : '';
+                                        applicant_personality = p && (p.mbti || p.MBTI || p.type) ? (p.mbti || p.MBTI || p.type) : '';
                                     } catch (e) {
-                                        mbti = '';
+                                        applicant_personality = '';
                                     }
                                 }
-                                return mbti ? <p>MBTI: {mbti}</p> : <p>MBTI: N/A</p>;
+                                return <p>Personality <br/> {applicant_personality}</p>;
                             })()}
                         </div>
+                        <div className='contactInfo'></div>
                     </div>
                     <div className='col2'>
-                        <div className='buttonGroup'>
-                            <Button variant='outlined' color='success' className='shortlistBtn'>Shortlist</Button>
-                            <Button variant='outlined' color='error' className='RejectBtn'>Reject</Button>
-                        </div>
                         <div className='resume'></div>
                     </div>
                 </div>
