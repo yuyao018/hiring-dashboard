@@ -18,7 +18,7 @@ const Managejob = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedStatus, setSelectedStatus] = useState("");
-    const [selectedRecruitment, setSelectedRecruitment] = useState("");
+    const [selectedRecruitment, setSelectedRecruitment] = useState("My Recruitment");
     const [currentAdminId, setCurrentAdminId] = useState(null);
 
     const navigate = useNavigate();
@@ -132,8 +132,8 @@ const Managejob = () => {
                                                 </TableCell>
                                                 <TableCell>{formatDate(job.created_at)}</TableCell>
                                                 <TableCell>
-                                                    <button className='editBtn'>Edit</button>
-                                                    <button className='closeBtn'>Close</button>
+                                                    <button className='publishBtn' disabled={job.status != "Draft"}>Publish</button>
+                                                    <button className='closeBtn' disabled={job.status != "Active"}>Close</button>
                                                 </TableCell>
                                             </TableRow>
                                         ))
