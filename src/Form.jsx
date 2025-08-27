@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Selection from './components/Selection/Selection'
 import { FaPlus, FaTrash } from "react-icons/fa"
+import Button from "@mui/material/Button"
 import './Form.css'
 
 const Form = () => {
@@ -60,6 +61,9 @@ const Form = () => {
                             </button>
                         </div>
                     ))}
+                </div>
+                <div className='publishBtn'>
+                    <Button variant='contained'>Publish</Button>
                 </div>
             </div>
         </div>

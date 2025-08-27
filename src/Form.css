@@ -140,3 +140,8 @@
     background: #fee2e2;
     border-color: #fca5a5;
 }
+
+.publishBtn {
+    display: flex;
+    justify-content: center;
+}
