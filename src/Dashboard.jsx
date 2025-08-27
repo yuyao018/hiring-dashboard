@@ -11,7 +11,8 @@ const Dashboard = () => {
     const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(null);
     const [animatedPercent, setAnimatedPercent] = useState(0);
     const jobStatus = ["Active", "Closed", "Draft"];
-    const applicationStatus = ["Applied", "Shortlisted", "Interview", "Offer", "Hired", "Rejected"];
+    // const applicationStatus = ["Applied", "Shortlisted", "Interview", "Offer", "Hired", "Rejected"];
+    const applicationStatus = ["Shortlisted", "Rejected"];
     const recruitment = ["My Recruitment", "All Recruitment"];
     const [selectedJob, setSelectedJob] = useState("");
 
