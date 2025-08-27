@@ -3,6 +3,7 @@ import Navbar from './components/Navbar/Navbar'
 import Selection from './components/Selection/Selection'
 import Card from './components/Card/Card'
 import { Link } from 'react-router-dom'
+import Button from '@mui/material/Button'
 import './Dashboard.css'
 
 const Dashboard = () => {
@@ -94,8 +95,13 @@ const Dashboard = () => {
                 <div className='dashboardTitle'>
                     <h1>Dashboard</h1>
                 </div>
-                <div className='createJob'>
-                    <Link to='/Form'>Create job</Link>
+                <div className='jobBtnGroup'>
+                    <div className='manageJob'>
+                        <Link to='/manageJob'>Manage job</Link>
+                    </div>
+                    <div className='createJob'>
+                        <Link to='/Form'>Create job</Link>
+                    </div>
                 </div>
             </div>
             <div className='recruiterTools'>
@@ -181,8 +187,8 @@ const Dashboard = () => {
                     </div>
                     <div className='col2'>
                         <div className='buttonGroup'>
-                            <button className='shortlistBtn'>Shortlist</button>
-                            <button className='RejectBtn'>Rejected</button>
+                            <Button variant='outlined' color='success' className='shortlistBtn'>Shortlist</Button>
+                            <Button variant='outlined' color='error' className='RejectBtn'>Reject</Button>
                         </div>
                         <div className='resume'></div>
                     </div>

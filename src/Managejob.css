@@ -1,0 +1,10 @@
+/* Basic styling for manageJob component */
+.manageJobContainer {
+    margin-top: 100px; /* Space for fixed navbar */
+    padding: 20px;
+}
+
+.manageJobContent {
+    max-width: 1200px;
+    margin: 0 auto;
+}

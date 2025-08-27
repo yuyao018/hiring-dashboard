@@ -20,7 +20,11 @@ a {
     padding-left: 16px;
 }
 
-.createJob {
+.jobBtnGroup {
+    display: flex;
+}
+
+.createJob, .manageJob {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px 16px;
@@ -120,28 +124,4 @@ a {
     margin-bottom: 10px;
     margin-right: 16px;
     justify-content: end;
-}
-
-.shortlistBtn, .RejectBtn {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.shortlistBtn {
-    background-color: #63C8FF;
-}
-
-.RejectBtn {
-    background-color: red;
-}
-
-.shortlistBtn:hover {
-    background-color: #A8F1FF;
-    cursor: pointer;
-}
-
-.RejectBtn:hover {
-    background-color: lightcoral;
-    cursor: pointer;
 }
