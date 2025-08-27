@@ -3,26 +3,36 @@
     top: 0;
     left: 0;
     width: 100%;
-    padding: 20px 10%;
-    background: darkblue;
+    padding: 14px 54px;
+    background: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .logo {
-    font-size: 32px;
-    color: #fff;
+    font-size: 30px;
+    color: #000000;
     font-weight: 700;
+}
+
+.logo:hover {
+    color: #0d389d;
 }
 
 .navbar a {
     position: relative;
     font-size: 18px;
-    color: #fff;
+    color: #000000;
     font-weight: 500;
     margin-left: 40px;
+}
+
+.navbar a:hover {
+    color: #0d389d;
 }
 
 .navbar a::before {
@@ -32,13 +42,12 @@
     left: 0;
     width: 0;
     height: 2px;
-    background: #fff;
-    transition: .3s;
+    background: #0d389d;
+    transition: .2s;
 }
 
 .navbar a:hover::before {
     width: 100%;
-
 }
 
 .portal {
