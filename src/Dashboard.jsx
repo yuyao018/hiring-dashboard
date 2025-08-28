@@ -13,11 +13,12 @@ const Dashboard = () => {
     const [applicants, setApplicants] = useState([]);
     const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(null);
     const [animatedPercent, setAnimatedPercent] = useState(0);
-    const jobStatus = ["Active", "Closed", "Draft"];
     const applicationStatus = ["Reviewing", "Shortlisted", "Rejected"];
     const recruitment = ["My Recruitment", "All Recruitment"];
     const [selectedJob, setSelectedJob] = useState("");
-    const RESUME_BASE_URL = process.env.RESUME_UPLOAD_PATH;
+    const [selectedStatus, setSelectedStatus] = useState("");
+    const [selectedRecruitment, setSelectedRecruitment] = useState("My Recruitment");
+    const [currentAdminId, setCurrentAdminId] = useState(null);
 
     useEffect(() => {
         const fetchJobs = async () => {
@@ -52,6 +53,13 @@ const Dashboard = () => {
                 console.error("Error fetching applicants:", error);
             }
         };
+
+        const adminData = localStorage.getItem('adminData');
+        if (adminData) {
+            const admin = JSON.parse(adminData);
+            console.log('Current Admin:', admin);
+            setCurrentAdminId(admin.id || admin.admin_id);
+        }
 
         fetchJobs();
         fetchApplicants();
@@ -142,20 +150,41 @@ const Dashboard = () => {
                 <div className='jobs'>
                     <Selection
                         options={["All Jobs", ...jobs.map(job => job.job)]}
-                        label="Job"
+                        label="Job Title"
                         value={selectedJob || "All Jobs"}
                         onChange={(e) => setSelectedJob(e.target.value === "All Jobs" ? "" : e.target.value)}
                     />
                 </div>
                 <div className='applicationStatus'>
-                    <Selection options={applicationStatus} label="Application Status"/>
+                    <Selection
+                        options={applicationStatus}
+                        label="Applicant Status"
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
                 </div>
                 <div className='Recruitment'>
-                    <Selection options={recruitment} label="Recruitment"/>
+                    <Selection
+                        options={recruitment}
+                        label="Recruitment"
+                        value={selectedRecruitment}
+                        onChange={(e) => setSelectedRecruitment(e.target.value)}
+                    />
                 </div>
             </div>
             <div className='resumeContainer'>
-                {(() => { const filteredApplicants = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob); return (
+                {(() => {
+                    const filteredApplicants = applicants.filter(a => {
+                    const admin_job = jobs.find(j => j.created_by === currentAdminId);
+                    if (!admin_job) return false;
+                    const matchApplicant = a.role_applied === admin_job.job_id;
+                    const job = jobs.find(j => j.job_id === a.role_applied);
+                    const jobMatch = !selectedJob || (job && job.job === selectedJob);
+                    const recruitmentMatch =
+                        selectedRecruitment === "All Recruitment" || matchApplicant;
+                    const statusMatch = !selectedStatus || a.status === selectedStatus;
+                    return jobMatch && recruitmentMatch && statusMatch;
+                }); return (
                 <div className='list'>
                     <h3>{filteredApplicants.length} Applicants</h3>
                     <div className='cardsWrapper'>
@@ -178,16 +207,27 @@ const Dashboard = () => {
                 )})()}
                 <div className='detail'>
                     {(() => {
-                        const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
-                        if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) {
-                        return (
-                            <div className='noApplicantSelected'>
-                            <p>Please select an applicant ...</p>
-                            </div>
-                        );
-                        }
+                        const filtered = applicants.filter(a => {
+                            const admin_job = jobs.find(j => j.created_by === currentAdminId);
+                            if (!admin_job) return false;
+                            const matchApplicant = a.role_applied === admin_job.job_id;
+                            const job = jobs.find(j => j.job_id === a.role_applied);
+                            const jobMatch = !selectedJob || (job && job.job === selectedJob);
+                            const recruitmentMatch =
+                                selectedRecruitment === "All Recruitment" || matchApplicant;
+                            const statusMatch = !selectedStatus || a.status === selectedStatus;
+                            return jobMatch && recruitmentMatch && statusMatch;
+                        });
 
                         const selected = filtered[selectedApplicantIndex];
+
+                        if (!selected) {
+                            return (
+                                <div className='noApplicantSelected'>
+                                    <p>Please select an applicant ...</p>
+                                </div>
+                            );
+                        }
 
                         let breakdown = null;
                             if (selected.compatibility_breakdown) {
