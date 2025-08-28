@@ -13,9 +13,9 @@ function Card({jobName, applicantName, appliedAt}){
 
     return(
         <div className="card">
-            <h2>{jobName}</h2>
-            <p>{applicantName}</p>
-            <p>{formatDateTime(appliedAt)}</p>
+            <h2 className='card-jobName'>{jobName}</h2>
+            <p className='card-applicantName'>{applicantName}</p>
+            <p className='card-date'>{formatDateTime(appliedAt)}</p>
         </div>
     );
 }

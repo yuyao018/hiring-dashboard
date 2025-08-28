@@ -121,4 +121,6 @@ app.post("/applicants", async (req, res) => {
     }
 });
 
+app.use("/resumes", express.static(process.env.RESUME_UPLOAD_PATH));
+
 app.listen(4000, () => console.log("Server running on port 4000"));

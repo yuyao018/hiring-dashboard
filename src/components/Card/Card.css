@@ -1,11 +1,9 @@
-h2 {
-    font-size: 20px;
+.card-jobName {
+    font-size: 18px;
 }
 
-.postDate {
-    padding-top: 12px;
+.card-applicantName, .card-date {
     font-size: 12px;
-    font-weight: bold;
 }
 
 .card {

@@ -5,7 +5,7 @@ async function getApplicants() {
 
     await con.connect();
     const result = await con.query(
-        "SELECT a.applicant_name, j.job AS job_name, a.created_at, a.compatibility_score AS score, a.personality_type FROM applicant a JOIN Job j ON a.role_applied = j.job_id"
+        "SELECT a.applicant_name, j.job AS job_name, a.contact_number, a.email, a.address, a.resume, a.created_at, a.compatibility_score AS score, a.personality_type, a.compatibility_breakdown FROM applicant a JOIN Job j ON a.role_applied = j.job_id"
     );
     await con.end();
 
