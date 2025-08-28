@@ -5,7 +5,7 @@ import Card from './components/Card/Card'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import { FaDownload } from "react-icons/fa";
-import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, Typography } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material";
 import './Dashboard.css'
 
 const Dashboard = () => {
@@ -14,8 +14,7 @@ const Dashboard = () => {
     const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(null);
     const [animatedPercent, setAnimatedPercent] = useState(0);
     const jobStatus = ["Active", "Closed", "Draft"];
-    // const applicationStatus = ["Applied", "Shortlisted", "Interview", "Offer", "Hired", "Rejected"];
-    const applicationStatus = ["Shortlisted", "Rejected"];
+    const applicationStatus = ["Reviewing", "Shortlisted", "Rejected"];
     const recruitment = ["My Recruitment", "All Recruitment"];
     const [selectedJob, setSelectedJob] = useState("");
     const RESUME_BASE_URL = process.env.RESUME_UPLOAD_PATH;
@@ -101,6 +100,28 @@ const Dashboard = () => {
         return `${datePart} ${hours}:${minutes}`;
     };
 
+    const handleUpdateApplicantStatus = async (applicantId, status) => {
+        try {
+            const response = await fetch(`http://localhost:4000/updateApplicantStatus/${applicantId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status })
+            });
+            const data = await response.json();
+            if (data.success) {
+                setApplicants(prev =>
+                    prev.map(applicant =>
+                        applicant.applicant_id === applicantId ? { ...applicant, status } : applicant
+                    )
+                );
+            } else {
+                console.error("Failed to update applicant status:", data.message);
+            }
+        } catch(error) {
+            console.error("Error updating applicant status:", error);
+        }
+    };
+
     return (
         <div>
             <Navbar/>
@@ -156,66 +177,19 @@ const Dashboard = () => {
                 </div>
                 )})()}
                 <div className='detail'>
-                    <div className='buttonGroup'>
-                        <Button variant='outlined' color='success' className='shortlistBtn'>Shortlist</Button>
-                        <Button variant='outlined' color='error' className='RejectBtn'>Reject</Button>
-                    </div>
-
                     {(() => {
                         const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
-                        if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) return null;
-                        const selected = filtered[selectedApplicantIndex];
-
+                        if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) {
                         return (
-                            <div className='applicantInfo'>
-                                <div className='applicantInfo-grid1'>
-                                    <h3>{String(selected.applicant_name)}</h3>
-                                    <p>{String(selected.job_name)}</p>
-                                </div>
-                                <div className='applicantInfo-grid2'><p><strong>Applied on</strong><br/>{String(formatDateTime(selected.created_at))}</p></div>
+                            <div className='noApplicantSelected'>
+                            <p>Please select an applicant ...</p>
                             </div>
                         );
-                    })()}
+                        }
 
-                    <div className='resultContainer'>
-                        {(() => {
-                            const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
-                            if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) {
-                                return <div className='score'><p>Please select an applicant ...</p></div>;
-                            }
-                            const selected = filtered[selectedApplicantIndex];
-                            console.log('Selected applicant:', selected);
-                            const percent = Math.max(0, Math.min(100, Math.round(Number(selected.score) || 0)));
-                            return (
-                                <div className='score'>
-                                    <h4 className='score-section'>Total Score</h4>
-                                    <div className='circular' style={{"--value": `${animatedPercent}`}}>
-                                        <span>{animatedPercent}%</span>
-                                    </div>
-                                </div>
-                            );
-                        })()}
+                        const selected = filtered[selectedApplicantIndex];
 
-                        {(() => {
-                            const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
-                            if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) return null;
-                            const selected = filtered[selectedApplicantIndex];
-
-                            let applicant_personality = '';
-                            // Prefer direct field from DB if available
-                            if (selected.personality_type) {
-                                applicant_personality = String(selected.personality_type);
-                            } else {
-                                // Fallback: parse prior personality JSON structure if present
-                                try {
-                                    const p = typeof selected.personality === 'string' ? JSON.parse(selected.personality) : selected.personality;
-                                    applicant_personality = p && (p.mbti || p.MBTI || p.type) ? (p.mbti || p.MBTI || p.type) : '';
-                                } catch (e) {
-                                    applicant_personality = '';
-                                }
-                            }
-
-                            let breakdown = null;
+                        let breakdown = null;
                             if (selected.compatibility_breakdown) {
                                 try {
                                     breakdown = typeof selected.compatibility_breakdown === 'string'
@@ -225,108 +199,117 @@ const Dashboard = () => {
                                     breakdown = null;
                                 }
                             }
-                            return (
-                                <div className='breakdown'>
-                                    <h4 className='breakdown-section'>Score Summary</h4>
-                                    <TableContainer component={Paper} sx={{ maxWidth: 600, margin: "auto", mt: 2, boxShadow: "none" }}>
-                                        <Table size='small' sx={{ width: "100%" }}>
+
+                        return (
+                            <>
+                                <div className='buttonGroup'>
+                                    <Button variant='outlined' color='success' className='shortlistBtn' onClick={() => handleUpdateApplicantStatus(selected.applicant_id, "Shortlisted")}>Shortlist</Button>
+                                    <Button variant='outlined' color='error' className='RejectBtn' onClick={() => handleUpdateApplicantStatus(selected.applicant_id, "Rejected")}>Reject</Button>
+                                </div>
+
+                                <div className='applicantInfo'>
+                                    <div className='applicantInfo-grid1'>
+                                        <h3>{String(selected.applicant_name)}</h3>
+                                        <p>{String(selected.job_name)}</p>
+                                    </div>
+                                    <div className='applicantInfo-grid2'>
+                                        <p><strong>Applied on</strong><br/>{String(formatDateTime(selected.created_at))}</p>
+                                    </div>
+                                </div>
+
+                                <div className='resultContainer'>
+                                    <div className='score'>
+                                        <h4 className='score-section'>Total Score</h4>
+                                        <div className='circular' style={{"--value": `${animatedPercent}`}}>
+                                            <span>{animatedPercent}%</span>
+                                        </div>
+                                    </div>
+
+                                    <div className='breakdown'>
+                                        <h4 className='breakdown-section'>Score Summary</h4>
+                                        <TableContainer component={Paper} sx={{ maxWidth: 600, margin: "auto", mt: 2, boxShadow: "none" }}>
+                                            <Table size='small' sx={{ width: "100%" }}>
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell><strong>Personality</strong></TableCell>
+                                                        <TableCell>{selected.personality_type}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell><strong>Education Qualification</strong></TableCell>
+                                                        <TableCell>{breakdown.qualification}</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell><strong>Required Skills</strong></TableCell>
+                                                        <TableCell>{Math.round(breakdown.skills * 100)}% matches</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell><strong>Grades</strong></TableCell>
+                                                        <TableCell>{Math.round(breakdown.grades * 4.0)} CGPA</TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell><strong>Achievement(s)</strong></TableCell>
+                                                        <TableCell>
+                                                        {breakdown.achievements === 0 ? "N/A" : breakdown.achievements}
+                                                        </TableCell>
+                                                    </TableRow>
+
+                                                    <TableRow>
+                                                        <TableCell><strong>Project(s) Done</strong></TableCell>
+                                                        <TableCell>{breakdown.projects === 0 ? "N/A" : breakdown.projects}</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </div>
+                                </div>
+
+                                <div className='contactInfo'>
+                                    <h4 className='contactInfo-section'>Applicant's Contact Information</h4>
+                                    <TableContainer component={Paper} sx={{ maxWidth: "100%", margin: "auto", mt: 1, boxShadow: "none" }}>
+                                        <Table sx={{ width: "100%" }}>
                                             <TableBody>
                                                 <TableRow>
-                                                    <TableCell><strong>Personality</strong></TableCell>
-                                                    <TableCell>{applicant_personality}</TableCell>
+                                                    <TableCell sx={{ width: "25%" }}><strong>Contact Number</strong></TableCell>
+                                                    <TableCell sx={{ width: "75%" }}>{String(selected.contact_number)}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
-                                                    <TableCell><strong>Education Qualification</strong></TableCell>
-                                                    <TableCell>{breakdown.qualification}</TableCell>
+                                                    <TableCell sx={{ width: "25%" }}><strong>Email Address</strong></TableCell>
+                                                    <TableCell sx={{ width: "75%" }}>{String(selected.email)}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
-                                                    <TableCell><strong>Required Skills</strong></TableCell>
-                                                    <TableCell>{Math.round(breakdown.skills * 100)}% matches</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell><strong>Grades</strong></TableCell>
-                                                    <TableCell>{Math.round(breakdown.grades * 4)} CGPA</TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell><strong>Achievements</strong></TableCell>
-                                                    <TableCell>
-                                                    {breakdown.achievements === 0 ? "N/A" : breakdown.achievements}
-                                                    </TableCell>
-                                                </TableRow>
-
-                                                <TableRow>
-                                                    <TableCell><strong>Projects Done</strong></TableCell>
-                                                    <TableCell>{breakdown.projects === 0 ? "N/A" : breakdown.projects}</TableCell>
+                                                    <TableCell sx={{ width: "25%" }}><strong>House Address</strong></TableCell>
+                                                    <TableCell sx={{ width: "75%" }}>{String(selected.address)}</TableCell>
                                                 </TableRow>
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
                                 </div>
-                            );
-                        })()}
-                    </div>
-                    {(() => {
-                        const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
-                        if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) return null;
-                        const selected = filtered[selectedApplicantIndex];
 
-                        return (
-                            <div className='contactInfo'>
-                                <h4 className='contactInfo-section'>Applicant's Contact Information</h4>
-                                <TableContainer component={Paper} sx={{ maxWidth: "100%", margin: "auto", mt: 1, boxShadow: "none" }}>
-                                    <Table sx={{ width: "100%" }}>
-                                        <TableBody>
-                                            <TableRow>
-                                                <TableCell sx={{ width: "25%" }}><strong>Contact Number</strong></TableCell>
-                                                <TableCell sx={{ width: "75%" }}>{String(selected.contact_number)}</TableCell>
-                                            </TableRow>
-
-                                            <TableRow>
-                                                <TableCell sx={{ width: "25%" }}><strong>Email Address</strong></TableCell>
-                                                <TableCell sx={{ width: "75%" }}>{String(selected.email)}</TableCell>
-                                            </TableRow>
-
-                                            <TableRow>
-                                                <TableCell sx={{ width: "25%" }}><strong>House Address</strong></TableCell>
-                                                <TableCell sx={{ width: "75%" }}>{String(selected.address)}</TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </div>
-                        );
-                        })()}
-
-                        {(() => {
-                        const filtered = !selectedJob ? applicants : applicants.filter(a => a.job_name === selectedJob);
-                        if (selectedApplicantIndex === null || !filtered[selectedApplicantIndex]) return null;
-                        const selected = filtered[selectedApplicantIndex];
-                        const resumeUrl = `${process.env.REACT_APP_RESUME_BASE_URL}/${selected.resume}`;
-                        console.log(resumeUrl)
-
-                        return (
-                            <div className='resumeDownload'>
-                                <div>
-                                    <p>For more information, click to download Applicant's Resume</p>
+                                <div className='resumeDownload'>
+                                    <div className='resumeDownload-p'>
+                                        <p>For more information, click to download Applicant's Resume</p>
+                                    </div>
+                                    <div>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            startIcon={<FaDownload />}
+                                            href={`http://localhost:4000/resumes/${selected.resume}`}
+                                            download
+                                        >
+                                            Download
+                                        </Button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        startIcon={<FaDownload />}
-                                        href={`http://localhost:4000/resumes/${selected.resume}`}
-                                        download
-                                    >
-                                        Download
-                                    </Button>
-                                </div>
-                            </div>
+                            </>
                         );
-                        })()}
+                    })()}
                 </div>
             </div>
         </div>

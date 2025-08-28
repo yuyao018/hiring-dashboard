@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { loginAdmin } = require("./src/database/admin");
 const { getJob, getAllJobs, editJob, updateJob, updateStatus, createJob } = require("./src/database/job");
-const { getApplicants } = require("./src/database/applicant");
+const { getApplicants, updateApplicantStatus } = require("./src/database/applicant");
 
 const app = express();
 app.use(cors());
@@ -21,8 +21,7 @@ app.post("/login", async (req, res) => {
         if (!admin) {
             return res.status(401).json({ success: false, message: "Invalid email or password" });
         }
-        
-        // Store admin info for job creation
+
         currentAdmin = admin;
         res.json({ success: true, admin });
     } catch (err) {
@@ -117,6 +116,18 @@ app.post("/applicants", async (req, res) => {
         res.json({ success: true, applicants });
     } catch (err) {
         console.error("Error fetching applicants:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+app.put("/updateApplicantStatus/:applicantId", async (req, res) => {
+    try {
+        const { applicantId } = req.params;
+        const { status } = req.body;
+        const jobs = await updateApplicantStatus(applicantId, status);
+        res.json({ success: true, applicant: jobs[0] });
+    } catch (err) {
+        console.error("Error fetching applicants data:", err);
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
