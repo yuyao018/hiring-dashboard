@@ -209,7 +209,7 @@ const Dashboard = () => {
 
                                 <div className='applicantInfo'>
                                     <div className='applicantInfo-grid1'>
-                                        <h3>{String(selected.applicant_name)}</h3>
+                                        <h3>{String(selected.applicant_name)} <span className={`applicantInfo-status ${selected.status}`}>{String(selected.status)}</span></h3>
                                         <p>{String(selected.job_name)}</p>
                                     </div>
                                     <div className='applicantInfo-grid2'>

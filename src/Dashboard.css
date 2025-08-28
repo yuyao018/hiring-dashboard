@@ -157,3 +157,24 @@ a {
 .resumeDownload-p {
     padding: 8px;
 }
+
+.applicantInfo-status {
+    font-size: 12px;
+    font-weight: 400;
+    padding: 2px 8px;
+    color: white;
+    border: none;
+    border-radius: 15px;
+}
+
+.applicantInfo-status.Shortlisted {
+    background-color: green;
+}
+
+.applicantInfo-status.Rejected {
+    background-color: red;
+}
+
+.applicantInfo-status.Reviewing {
+    background-color: orange;
+}
