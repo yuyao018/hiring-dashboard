@@ -128,11 +128,13 @@ CREATE TABLE Job (
    password VARCHAR(12) NOT NULL,                        -- store a hashed password, not plain text
    role VARCHAR(20) NOT NULL                              -- e.g. HR Manager, Hiring Manager
    );
+   ```
 
+```
    -- Add in sample data (optional)
    INSERT INTO jobs (
-    job_id, title, job_type, experience, qualification, responsibilities,
-    description, created_at, updated_at, company_id, status
+    job_id, job, job_type, experience, education, requirement,
+    description, updated_at, created_at, created_by, status
    ) VALUES
    ('3f0d49c9-b172-40fb-8c46-401ed1f7284a', 'Test Engineer', 'Full-time', 'Fresh Graduates',
    'Bachelor Degree in Computer Science',
