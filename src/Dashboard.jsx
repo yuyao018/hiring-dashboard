@@ -277,29 +277,29 @@ const Dashboard = () => {
 
                                                     <TableRow>
                                                         <TableCell><strong>Education Qualification</strong></TableCell>
-                                                        <TableCell>{breakdown.qualification}</TableCell>
+                                                        <TableCell>{breakdown?.qualification || "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
                                                         <TableCell><strong>Required Skills</strong></TableCell>
-                                                        <TableCell>{Math.round(breakdown.skills * 100)}% matches</TableCell>
+                                                        <TableCell>{breakdown?.skills ? `${Math.round(breakdown.skills * 100)}% matches` : "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
                                                         <TableCell><strong>Grades</strong></TableCell>
-                                                        <TableCell>{Math.round(breakdown.grades * 4.0)} CGPA</TableCell>
+                                                        <TableCell>{breakdown?.grades ? `${parseFloat((breakdown.grades * 4.0).toFixed(2))} CGPA` : "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
                                                         <TableCell><strong>Achievement(s)</strong></TableCell>
                                                         <TableCell>
-                                                        {breakdown.achievements === 0 ? "N/A" : breakdown.achievements}
+                                                        {breakdown?.achievements === 0 ? "N/A" : (breakdown?.achievements || "N/A")}
                                                         </TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
                                                         <TableCell><strong>Project(s) Done</strong></TableCell>
-                                                        <TableCell>{breakdown.projects === 0 ? "N/A" : breakdown.projects}</TableCell>
+                                                        <TableCell>{breakdown?.projects === 0 ? "N/A" : (breakdown?.projects || "N/A")}</TableCell>
                                                     </TableRow>
                                                 </TableBody>
                                             </Table>
@@ -314,12 +314,12 @@ const Dashboard = () => {
                                             <TableBody>
                                                 <TableRow>
                                                     <TableCell sx={{ width: "25%" }}><strong>Contact Number</strong></TableCell>
-                                                    <TableCell sx={{ width: "75%" }}>{String(selected.contact_number)}</TableCell>
+                                                    <TableCell sx={{ width: "75%" }}>+{String(selected.contact_number)}</TableCell>
                                                 </TableRow>
 
                                                 <TableRow>
                                                     <TableCell sx={{ width: "25%" }}><strong>Email Address</strong></TableCell>
-                                                    <TableCell sx={{ width: "75%" }}>{String(selected.email)}</TableCell>
+                                                    <TableCell sx={{ width: "75%" }}><a href={`mailto:${String(selected.email)}`}>{String(selected.email)}</a></TableCell>
                                                 </TableRow>
 
                                                 <TableRow>

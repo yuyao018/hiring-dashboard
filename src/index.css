@@ -45,6 +45,11 @@ a {
     margin-top: 5px;
 }
 
+.loginBtn {
+    display: flex;
+    justify-content: center;
+}
+
 .toast {
     position: fixed;
     top: 20px; /* distance from top */

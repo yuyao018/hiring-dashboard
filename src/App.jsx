@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
+import Button from '@mui/material/Button'
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -66,9 +67,11 @@ const App = () => {
           />
         </div>
 
-        <button className="button" type="submit">
-          Login
-        </button>
+        <div className="loginBtn">
+          <Button type="submit" variant='contained' color='primary'>
+            Login
+          </Button>
+        </div>
       </form>
 
       {toast && <div className="toast">{toast}</div>}
