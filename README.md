@@ -1,4 +1,5 @@
 # High5 Recruitment Portal
+- **Project**: Hiring Dashboard (Recruitment Portal) with User-friendly Interface
 
 ## Team Members
 - Vaenesa Gayatri (Leader)       - develop chatbot
@@ -8,6 +9,9 @@
 - Muhammad Rasuli Bin Akbar Ali  - survey
 
 ## Problem and Solution Summary
+
+### Scenario - Company Background
+High5 is a small-to-medium IT services company based in Kuala Lumpur with around 60 employees. They specialize in providing cloud infrastructure, cybersecurity solutions, and custom software development for SMEs. The company is growing rapidly and needs to expand its workforce, especially in software engineering, data analysis, and cybersecurity.
 
 ### Problem Statement
 Traditional recruitment processes are often time-consuming, inefficient, and lack systematic evaluation methods. Recruiters struggle with:
@@ -129,7 +133,11 @@ CREATE TABLE Job (
    role VARCHAR(20) NOT NULL                              -- e.g. HR Manager, Hiring Manager
    );
 
-   -- Add in sample data
+   -- Add in sample data to log in hiring system
+   -- Insert sample Admin
+   INSERT INTO admin (name, email, password, role) VALUES
+   ('Alice Tan', 'alice@company.com', '123', 'Hiring Manager'),
+   ('Bob Lee', 'bob@company.com', '123', 'IT Manager');
    ```
 
 1. **Create environment variables** by creating a `.env` file in the root directory:
