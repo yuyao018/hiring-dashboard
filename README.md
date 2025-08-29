@@ -128,9 +128,7 @@ CREATE TABLE Job (
    password VARCHAR(12) NOT NULL,                        -- store a hashed password, not plain text
    role VARCHAR(20) NOT NULL                              -- e.g. HR Manager, Hiring Manager
    );
-   ```
 
-```
    -- Add in sample data (optional)
    INSERT INTO jobs (
     job_id, job, job_type, experience, education, requirement,
@@ -171,7 +169,7 @@ CREATE TABLE Job (
    ('d184c221-3eb3-494c-85f2-628e40f6b8df', 'san', 'san@highfive.com', '123', 'IT manager');
    ```
 
-3. **Create environment variables** by creating a `.env` file in the root directory:
+1. **Create environment variables** by creating a `.env` file in the root directory:
    ```env
    DB_HOST=localhost
    DB_USER=your_username
