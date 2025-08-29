@@ -230,15 +230,24 @@ const Dashboard = () => {
                         }
 
                         let breakdown = null;
-                            if (selected.compatibility_breakdown) {
-                                try {
-                                    breakdown = typeof selected.compatibility_breakdown === 'string'
-                                        ? JSON.parse(selected.compatibility_breakdown)
-                                        : selected.compatibility_breakdown;
-                                } catch {
-                                    breakdown = null;
-                                }
+                        if (selected.compatibility_breakdown) {
+                            try {
+                                breakdown = typeof selected.compatibility_breakdown === 'string'
+                                    ? JSON.parse(selected.compatibility_breakdown)
+                                    : selected.compatibility_breakdown;
+                                console.log('Parsed Breakdown:', breakdown);
+                            } catch (error) {
+                                console.error('Error parsing compatibility breakdown:', error);
+                                breakdown = null;
                             }
+                        } else {
+                            console.log('No compatibility breakdown found');
+                        }
+
+                        // Debug: Log the selected applicant data
+                        console.log('Selected Applicant:', selected);
+                        console.log('Compatibility Breakdown Raw:', selected.compatibility_breakdown);
+                        console.log('Compatibility Score:', selected.score);
 
                         return (
                             <>
@@ -266,48 +275,38 @@ const Dashboard = () => {
                                     </div>
 
                                     <div className='breakdown'>
-                                        <h4 className='breakdown-section'>Score Summary</h4>
+                                        <h4 className='breakdown-section'>Compatibility Breakdown</h4>
                                         <TableContainer component={Paper} sx={{ maxWidth: 600, margin: "auto", mt: 2, boxShadow: "none" }}>
                                             <Table size='small' sx={{ width: "100%" }}>
                                                 <TableBody>
                                                     <TableRow>
-                                                        <TableCell><strong>Personality</strong></TableCell>
-                                                        <TableCell>{selected.personality_type}</TableCell>
+                                                        <TableCell><strong>Personality Type</strong></TableCell>
+                                                        <TableCell>{selected.personality_type || "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
-                                                        <TableCell><strong>Education Qualification</strong></TableCell>
-                                                        <TableCell>
-                                                            {breakdown?.qualification > 0.5 ? (
-                                                                <span style={{ fontWeight: 'bold', color: 'green' }}>Qualified</span>
-                                                            ) : breakdown?.qualification ? (
-                                                                <span style={{ fontWeight: 'bold', color: 'red' }}>Not Qualified</span>
-                                                            ) : (
-                                                                "N/A"
-                                                            )}
-                                                        </TableCell>
+                                                        <TableCell><strong>Qualification Score</strong></TableCell>
+                                                        <TableCell>{breakdown?.qualification || "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
-                                                        <TableCell><strong>Required Skills</strong></TableCell>
-                                                        <TableCell>{breakdown?.skills ? `${Math.round(breakdown.skills * 100)}% matches` : "N/A"}</TableCell>
+                                                        <TableCell><strong>Skills Score</strong></TableCell>
+                                                        <TableCell>{breakdown?.skills || "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
-                                                        <TableCell><strong>Grades</strong></TableCell>
-                                                        <TableCell>{breakdown?.grades ? `${parseFloat((breakdown.grades * 4.0).toFixed(2))} CGPA` : "N/A"}</TableCell>
+                                                        <TableCell><strong>Grades Score</strong></TableCell>
+                                                        <TableCell>{breakdown?.grades || "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
-                                                        <TableCell><strong>Achievement(s)</strong></TableCell>
-                                                        <TableCell>
-                                                        {breakdown?.achievements === 0 ? "N/A" : (breakdown?.achievements || "N/A")}
-                                                        </TableCell>
+                                                        <TableCell><strong>Achievements Score</strong></TableCell>
+                                                        <TableCell>{breakdown?.achievements || "N/A"}</TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
-                                                        <TableCell><strong>Project(s) Done</strong></TableCell>
-                                                        <TableCell>{breakdown?.projects === 0 ? "N/A" : (breakdown?.projects || "N/A")}</TableCell>
+                                                        <TableCell><strong>Projects Score</strong></TableCell>
+                                                        <TableCell>{breakdown?.projects || "N/A"}</TableCell>
                                                     </TableRow>
                                                 </TableBody>
                                             </Table>
