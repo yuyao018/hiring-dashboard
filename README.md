@@ -74,7 +74,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ### Database Setup
 1. **Install PostgreSQL**, link to download [https://www.postgresql.org/]
 2. **Create database**
-   ```CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  --auto-generate UUID for primary key
+      ```CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  --auto-generate UUID for primary key
 
 -- Create Applicant table
 CREATE TABLE Applicant (
@@ -129,7 +129,7 @@ CREATE TABLE Job (
    role VARCHAR(20) NOT NULL                              -- e.g. HR Manager, Hiring Manager
    );
 
-   -- Add in sample data (optional)
+   -- Add in sample data(optional)
    INSERT INTO jobs (
     job_id, job, job_type, experience, education, requirement,
     description, updated_at, created_at, created_by, status
