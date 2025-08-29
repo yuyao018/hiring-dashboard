@@ -74,7 +74,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ### Database Setup
 1. **Install PostgreSQL**, link to download [https://www.postgresql.org/]
 2. **Create database**
-      ```CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  --auto-generate UUID for primary key
+```CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  --auto-generate UUID for primary key
 
 -- Create Applicant table
 CREATE TABLE Applicant (
@@ -129,44 +129,7 @@ CREATE TABLE Job (
    role VARCHAR(20) NOT NULL                              -- e.g. HR Manager, Hiring Manager
    );
 
-   -- Add in sample data(optional)
-   INSERT INTO jobs (
-    job_id, job, job_type, experience, education, requirement,
-    description, updated_at, created_at, created_by, status
-   ) VALUES
-   ('3f0d49c9-b172-40fb-8c46-401ed1f7284a', 'Test Engineer', 'Full-time', 'Fresh Graduates',
-   'Bachelor Degree in Computer Science',
-   'Identify and develop alternate test platforms to improve coverage, apply customer use-case sequences, and reduce test cost.; Create and maintain engineering test programs, tools, and hardware interfaces for new semiconductor memory products and silicon debug.; Develop characterization and qualification test programs based on datasheets and customer specifications.; Design test algorithms and programs to validate new NAND features and high-speed operations.; Enhance test methodologies to support advanced characterization, higher data rates, and evolving customer requirements.; Support failure analysis by simulating NAND sequences, investigating root causes, and collaborating with cross-functional teams.; Automate test program development and work processes for efficiency.',
-   'This role focuses on developing and enhancing test platforms, programs, and methodologies for next-generation non-volatile memory products. The engineer will design and validate advanced test algorithms, support silicon debug, and ensure product quality through comprehensive characterization and qualification. The role also involves collaborating with cross-functional teams to resolve device issues, driving efficiency through automation, and continuously improving validation approaches to meet evolving customer requirements and high-speed NAND operations.',
-   '2025-08-29 17:26:53.407435', '2025-08-26 16:35:54.772626', 'f2c0fbd4-f81f-4e1d-a42f-36cabf3f4308', 'Closed'),
-
-   ('da97cb1a-c858-4682-bade-99a1ad5f038e', 'Validation Engineer (Linux)', 'Intern', 'No experience',
-   'Diploma in Computer Science/Engineer or related field',
-   'Extensive Linux experience (Ubuntu/Red Hat/Debian/CentOS etc.); Automation or script creation experience with service side languages (Shell, Bash, Perl, Python, etc.); Proven knowledge in the use of Laboratory measurement equipment such as high-speed oscilloscopes, multi-meters, and time-domain reflectometers to characterize the electrical performance of new silicon and platform interfaces; Experience in navigating board design schematic and layout and performing board level component debugging',
-   'This role involves managing Linux OS installation, deployment, monitoring, and troubleshooting, along with developing automation scripts and debugging issues. Responsibilities include setting up validation platforms, creating disaster recovery plans, conducting security assessments, performing updates and maintenance, working with protocols like FTP, SSH, SMTP, and LDAP, and documenting configurations. The role also requires responding to system issues within SLAs and collaborating closely with the IT team to resolve problems.',
-   '2025-08-29 17:26:37.150174', '2025-08-29 17:00:41.379201', 'f2c0fbd4-f81f-4e1d-a42f-36cabf3f4308', 'Active'),
-
-   ('811a9663-836e-4ebc-857e-04af9da1b0a4', 'Software Engineer (IoT Division)', 'Part-time', 'Fresh Graduates',
-   'Degree in Computer Science/Engineer/Related field',
-   'General programming skills (C#, SQL, WPF, Web Development (Visual Studio)); General programming knowledge about database (PostgreSQL, MSSQL, MySQL and Oracle); Good knowledge about Internet of Things (IoT), Industrial 4.0 (I4.0) and smart manufacturing process; Familiar with Cloud based system (AWS, Microsoft Azure); Software interface design (UI/UX); Software testing & debugging, able to test the software and troubleshoot the software bugs and provide quick fix',
-   'A software developer is responsible for designing, developing, and installing software solutions to meet organizational needs. This involves determining operational feasibility through careful evaluation of analysis, problem definition, requirements, solution development, and proposed implementations. By studying information needs, collaborating with users, and analyzing systems flow, data usage, and work processes, the developer creates effective software solutions. They also investigate problem areas and follow the software development lifecycle to ensure efficiency and reliability. In addition, developers document and demonstrate their solutions using documentation, flowcharts, layouts, diagrams, charts, code comments, and clear coding practices. Their role extends to preparing and installing solutions by designing system specifications, setting standards, and programming. Furthermore, they provide valuable information by collecting, analyzing, and summarizing development and service issues. Ultimately, software developers contribute to the success of engineering and organizational missions by completing related results as needed.',
-   '2025-08-27 09:31:24.585929', '2025-08-27 09:31:24.585929', 'd184c221-3eb3-494c-85f2-628e40f6b8df', 'Active'),
-
-   ('9b6d51c8-ca74-4a80-ae5c-c2c206677676', 'Full Stack Developer', 'Full-time', NULL,
-   'Bachelor Degree in Computer Science / Engineering (Software / Computer / Electrical & Electronics)',
-   'Experience and / or training in programming is an added advantage; Knowledge of front-end languages including Angular, Node JS, HTML5, CSS, Bootstrap, JavaScript, C++, and Jquery; Proficient in back-end languages including Java, Python, .NET; Experience with web development stack, e.g. Gradle build tools, Spring framework will be an advantage; Experienced in code versioning tools, such as Git; Knowledge of database systems and SQL; Good programming fundamentals, good analytical and problem solving skills',
-   'We are seeking a Full Stack Developer to take ownership of both web application and microservices API development. The role involves working across the full development lifecycle, from front-end architecture to back-end services, while ensuring performance, reliability, and scalability. Candidates with an interest in IoT may also have opportunities to contribute to Android application development for smartphones and wearable devices.',
-   '2025-08-27 20:12:51.562989', '2025-08-26 17:45:04.81779', 'd184c221-3eb3-494c-85f2-628e40f6b8df', 'Draft'),
-
-   ('4d2b639e-5fc8-4952-aa11-034d5f1c4ed6', 'Software Validation Engineer', 'Full-time', '2–3 years',
-   'Bachelor''s Degree/Post Graduate Diploma in Computer -Science/Information Technology',
-   NULL,
-   NULL,
-   '2025-08-27 17:08:24.676965', '2025-08-27 15:14:58.902542', 'f2c0fbd4-f81f-4e1d-a42f-36cabf3f4308', 'Closed');
-
-   INSERT INTO company_users (company_id, name, email, password, role) VALUES
-   ('f2c0fbd4-f81f-4e1d-a42f-36cabf3f4308', 'Jonathan', 'jonathan@highfive.com', '123', 'hiring manager'),
-   ('d184c221-3eb3-494c-85f2-628e40f6b8df', 'san', 'san@highfive.com', '123', 'IT manager');
+   -- Add in sample data
    ```
 
 1. **Create environment variables** by creating a `.env` file in the root directory:
