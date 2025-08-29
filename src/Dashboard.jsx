@@ -277,7 +277,15 @@ const Dashboard = () => {
 
                                                     <TableRow>
                                                         <TableCell><strong>Education Qualification</strong></TableCell>
-                                                        <TableCell>{breakdown?.qualification || "N/A"}</TableCell>
+                                                        <TableCell>
+                                                            {breakdown?.qualification > 0.5 ? (
+                                                                <span style={{ fontWeight: 'bold', color: 'green' }}>Qualified</span>
+                                                            ) : breakdown?.qualification ? (
+                                                                <span style={{ fontWeight: 'bold', color: 'red' }}>Not Qualified</span>
+                                                            ) : (
+                                                                "N/A"
+                                                            )}
+                                                        </TableCell>
                                                     </TableRow>
 
                                                     <TableRow>
