@@ -185,7 +185,7 @@ CREATE TABLE Job (
 
 3. **Start the backend server**
    ```bash
-   npm run server
+   npm run server2 or node server2.js
    ```
    The server will start on `http://localhost:4000`
 
